@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mvcar">
+
+    <!-- TODOs
+        1. 连杆和关键准确的物理属性
+        2. gazebo仿真支持
+            - 添加传感器
+            - 添加控制插件
+    -->
+
+    <!--轮子连杆宏-->
+    <xacro:macro name="wheel_link" params="prefix">
+        <link name="${prefix}_wheel_link">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="package://moving_car/mesh/wheel.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="package://moving_car/mesh/wheel.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+            </collision>
+        </link>
+    </xacro:macro>
+
+    <!-- 轮子关节宏 -->
+    <xacro:macro name="wheel_joint" params="prefix xyz rpy">
+        <joint name="${prefix}_wheel_joint" type="continuous">
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <parent link="body_link" />
+            <child link="${prefix}_wheel_link" />
+            <axis xyz="0.0 0.0 1.0" />
+        </joint>
+    </xacro:macro>
+
+    <link name="dummy_link"></link>
+
+    <!-- 定义车身关节 -->
+    <link name="body_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://moving_car/mesh/body.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://moving_car/mesh/body.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="dummy_joint" type="fixed">
+        <parent link="dummy_link" />
+        <child link="body_link" />
+    </joint>
+
+    <!-- 定义轮子连杆 -->
+    <xacro:wheel_link prefix="front_left" />
+    <xacro:wheel_link prefix="front_right" />
+    <xacro:wheel_link prefix="back_left" />
+    <xacro:wheel_link prefix="back_right" />
+
+    <!-- 定义轮子关节 -->
+    <xacro:wheel_joint prefix="front_left" xyz="-0.08 0.054 0.01" rpy="0 -1.5707963267948966 0" />
+    <xacro:wheel_joint prefix="front_right" xyz="0.08 0.054 0.01" rpy="0 -1.5707963267948966 0" />
+    <xacro:wheel_joint prefix="back_left" xyz="-0.08 -0.054 0.01" rpy="0 -1.5707963267948966 0" />
+    <xacro:wheel_joint prefix="back_right" xyz="0.08 -0.054 0.01" rpy="0 -1.5707963267948966 0" />
+
+    <!-- 摄像头传感器 -->
+
+    <!-- 激光雷达传感器 -->
+</robot>
