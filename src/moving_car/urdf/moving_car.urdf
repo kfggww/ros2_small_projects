@@ -19,7 +19,7 @@
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <mesh filename="package://moving_car/meshes/wheel.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="$(find moving_car)/meshes/wheel.stl" scale="0.001 0.001 0.001" />
                 </geometry>
                 <material name="wheel_material">
                     <color rgba="0.2 0.2 0.8 1.0" />
@@ -28,7 +28,7 @@
             <collision>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <mesh filename="package://moving_car/meshes/wheel.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="$(find moving_car)/meshes/wheel.stl" scale="0.001 0.001 0.001" />
                 </geometry>
             </collision>
         </link>
@@ -44,8 +44,6 @@
         </joint>
     </xacro:macro>
 
-    <link name="dummy_link"></link>
-
     <!-- 定义车身连杆 -->
     <link name="body_link">
         <inertial>
@@ -56,7 +54,7 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <mesh filename="package://moving_car/meshes/body.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="$(find moving_car)/meshes/body.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="body_material">
                 <color rgba="0.8 0.8 0.8 1.0" />
@@ -65,15 +63,10 @@
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <mesh filename="package://moving_car/meshes/body.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="$(find moving_car)/meshes/body.stl" scale="0.001 0.001 0.001" />
             </geometry>
         </collision>
     </link>
-
-    <joint name="dummy_joint" type="fixed">
-        <parent link="dummy_link" />
-        <child link="body_link" />
-    </joint>
 
     <!-- 定义轮子连杆 -->
     <xacro:wheel_link prefix="front_left" />
@@ -109,11 +102,6 @@
         <parent link="body_link" />
         <child link="camera_link" />
     </joint>
-
-    <!-- gazebo body_link -->
-    <gazebo reference="body_link">
-        <material>Gazebo/Orange</material>
-    </gazebo>
 
     <!-- gazebo camera_link -->
     <gazebo reference="camera_link">
