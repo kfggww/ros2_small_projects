@@ -11,16 +11,24 @@
     <!--轮子连杆宏-->
     <xacro:macro name="wheel_link" params="prefix">
         <link name="${prefix}_wheel_link">
+            <inertial>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <mass value="1.0" />
+                <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+            </inertial>
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <mesh filename="package://moving_car/mesh/wheel.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="package://moving_car/meshes/wheel.stl" scale="0.001 0.001 0.001" />
                 </geometry>
+                <material name="wheel_material">
+                    <color rgba="0.2 0.2 0.8 1.0" />
+                </material>
             </visual>
             <collision>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <mesh filename="package://moving_car/mesh/wheel.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="package://moving_car/meshes/wheel.stl" scale="0.001 0.001 0.001" />
                 </geometry>
             </collision>
         </link>
@@ -38,18 +46,26 @@
 
     <link name="dummy_link"></link>
 
-    <!-- 定义车身关节 -->
+    <!-- 定义车身连杆 -->
     <link name="body_link">
+        <inertial>
+            <origin xyz="0.0 0.0 0.02" rpy="0.0 0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <mesh filename="package://moving_car/mesh/body.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://moving_car/meshes/body.stl" scale="0.001 0.001 0.001" />
             </geometry>
+            <material name="body_material">
+                <color rgba="0.8 0.8 0.8 1.0" />
+            </material>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <mesh filename="package://moving_car/mesh/body.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://moving_car/meshes/body.stl" scale="0.001 0.001 0.001" />
             </geometry>
         </collision>
     </link>
@@ -65,13 +81,52 @@
     <xacro:wheel_link prefix="back_left" />
     <xacro:wheel_link prefix="back_right" />
 
+    <!-- 摄像头连杆 -->
+    <link name="camera_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <box size="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <box size="0.01 0.01 0.01" />
+            </geometry>
+        </collision>
+    </link>
+
     <!-- 定义轮子关节 -->
     <xacro:wheel_joint prefix="front_left" xyz="-0.08 0.054 0.01" rpy="0 -1.5707963267948966 0" />
     <xacro:wheel_joint prefix="front_right" xyz="0.08 0.054 0.01" rpy="0 -1.5707963267948966 0" />
     <xacro:wheel_joint prefix="back_left" xyz="-0.08 -0.054 0.01" rpy="0 -1.5707963267948966 0" />
     <xacro:wheel_joint prefix="back_right" xyz="0.08 -0.054 0.01" rpy="0 -1.5707963267948966 0" />
 
-    <!-- 摄像头传感器 -->
+    <!-- 摄像头关节 -->
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="0.0 0.08 0.045" rpy="-0.7853981633974483 0.0 0.0" />
+        <parent link="body_link" />
+        <child link="camera_link" />
+    </joint>
+
+    <!-- gazebo body_link -->
+    <gazebo reference="body_link">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <!-- gazebo camera_link -->
+    <gazebo reference="camera_link">
+        <sensor name="camera1" type="camera">
+            <always_on>true</always_on>
+            <camera>
+                <image>
+                    <width>360</width>
+                    <height>240</height>
+                </image>
+            </camera>
+        </sensor>
+    </gazebo>
 
     <!-- 激光雷达传感器 -->
 </robot>
