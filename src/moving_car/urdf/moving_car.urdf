@@ -4,7 +4,6 @@
     <!-- TODOs
         1. 连杆和关键准确的物理属性
         2. gazebo仿真支持
-            - 添加传感器
             - 添加控制插件
     -->
 
@@ -134,7 +133,7 @@
 
     <!-- 摄像头关节 -->
     <joint name="camera_joint" type="fixed">
-        <origin xyz="0.0 0.08 0.045" rpy="-0.7853981633974483 0.0 0.0" />
+        <origin xyz="0.0 0.077 0.045" rpy="0 0.0 0.0" />
         <parent link="body_link" />
         <child link="camera_link" />
     </joint>
@@ -164,6 +163,7 @@
     <!-- gazebo 摄像头传感器 -->
     <gazebo reference="camera_link">
         <sensor name="camera1" type="camera">
+            <pose>0 0 0 0 0.7853981633974483 1.5707963267948966</pose>
             <always_on>true</always_on>
             <topic>car_camera_raw</topic>
             <camera>
