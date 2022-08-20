@@ -7,13 +7,32 @@
             - 添加控制插件
     -->
 
+    <!-- 车身连杆的物理属性 -->
+    <xacro:property name="body_mass" value="0.628" />
+    <xacro:property name="body_ixx" value="1885.435e-6" />
+    <xacro:property name="body_ixy" value="0.0" />
+    <xacro:property name="body_ixz" value="0.0" />
+    <xacro:property name="body_iyy" value="1283.605e-6" />
+    <xacro:property name="body_iyz" value="-2.249e-6" />
+    <xacro:property name="body_izz" value="2989.899e-6" />
+
+    <!-- 轮子连杆物理属性 -->
+    <xacro:property name="wheel_mass" value="0.061" />
+    <xacro:property name="wheel_ixx" value="15.264e-6" />
+    <xacro:property name="wheel_ixy" value="0.0" />
+    <xacro:property name="wheel_ixz" value="0.0" />
+    <xacro:property name="wheel_iyy" value="15.264e-6" />
+    <xacro:property name="wheel_iyz" value="0.0" />
+    <xacro:property name="wheel_izz" value="26.622e-6" />
+
+
     <!--轮子连杆宏-->
     <xacro:macro name="wheel_link" params="prefix">
         <link name="${prefix}_wheel_link">
             <inertial>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-                <mass value="1.0" />
-                <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+                <mass value="${wheel_mass}" />
+                <inertia ixx="${wheel_ixx}" ixy="${wheel_ixy}" ixz="${wheel_ixz}" iyy="${wheel_iyy}" iyz="${wheel_iyz}" izz="${wheel_izz}" />
             </inertial>
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
@@ -48,9 +67,9 @@
     <!-- 车身连杆 -->
     <link name="body_link">
         <inertial>
-            <origin xyz="0.0 0.0 0.02" rpy="0.0 0.0 0.0" />
-            <mass value="1.0" />
-            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+            <origin xyz="0.0 -0.483e-3 12.583e-3" rpy="0.0 0.0 0.0" />
+            <mass value="${body_mass}" />
+            <inertia ixx="${body_ixx}" ixy="${body_ixy}" ixz="${body_ixz}" iyy="${body_iyy}" iyz="${body_iyz}" izz="${body_izz}" />
         </inertial>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
@@ -157,6 +176,14 @@
         <plugin filename="ignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"></plugin>
         <plugin filename="libignition-gazebo-sensors-system.so" name="ignition::gazebo::systems::Sensors">
             <render_engine>ogre2</render_engine>
+        </plugin>
+        <plugin filename="libignition-gazebo-diff-drive-system.so" name="ignition::gazebo::systems::DiffDrive">
+            <left_joint>front_left_wheel_joint</left_joint>
+            <right_joint>front_right_wheel_joint</right_joint>
+            <wheel_separation>0.16</wheel_separation>
+            <wheel_radius>0.026</wheel_radius>
+            <odom_publish_frequency>1</odom_publish_frequency>
+            <topic>cmd_vel</topic>
         </plugin>
     </gazebo>
 
