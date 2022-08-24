@@ -99,13 +99,13 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <box size="0.01 0.01 0.01" />
+                <box size="0.001 0.02 0.01" />
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <box size="0.01 0.01 0.01" />
+                <box size="0.001 0.02 0.01" />
             </geometry>
         </collision>
     </link>
@@ -152,7 +152,7 @@
 
     <!-- 摄像头关节 -->
     <joint name="camera_joint" type="fixed">
-        <origin xyz="0.0 0.077 0.045" rpy="0 0.0 0.0" />
+        <origin xyz="0.0 0.08 0.08" rpy="0.0 0.7853981633974483 1.5707963267948966" />
         <parent link="body_link" />
         <child link="camera_link" />
     </joint>
@@ -190,7 +190,7 @@
     <!-- gazebo 摄像头传感器 -->
     <gazebo reference="camera_link">
         <sensor name="camera1" type="camera">
-            <pose>0 0 0 0 0.7853981633974483 1.5707963267948966</pose>
+            <pose>0 0 0 0 0 0</pose>
             <always_on>true</always_on>
             <topic>car_camera_raw</topic>
             <camera>

@@ -97,7 +97,7 @@
           </material>
         </visual>
         <visual name="line4_visual">
-          <pose>-2.97 0.26 0 0 0 2.8797932657906435</pose>
+          <pose>-2.7071067811865475 0.7071067811865475 0 0 0 2.356194490192345</pose>
           <geometry>
             <plane>
               <normal>0 0 1</normal>

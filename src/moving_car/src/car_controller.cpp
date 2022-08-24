@@ -30,7 +30,7 @@ protected:
     void camera_image_callback(const sensor_msgs::msg::Image &img)
     {
         const double target_center = img.width / 2.0;
-        const double kp = 0.1;
+        const double kp = 0.2;
 
         // 转换原始图像
         auto cv_img = cv_bridge::toCvCopy(img, "bgr8");
@@ -51,7 +51,7 @@ protected:
         geometry_msgs::msg::Twist vel;
         if (std::isfinite(center))
         {
-            vel.linear.x = 0.5;
+            vel.linear.x = 0.4;
             vel.angular.z = -kp * (center - target_center);
         }
 
