@@ -36,7 +36,7 @@ def generate_launch_description():
 
     set_model_pose = ExecuteProcess(
         cmd=[
-            "ign service -s /world/empty/set_pose --reqtype ignition.msgs.Pose --reptype ignition.msgs.Boolean --timeout 3000 --req 'name: \"small_car\", position: {x: 0, y: 0, z: 0.03}, orientation: {x: 0, y: 0, z: 1, w: 0.8}'"
+            "ign service -s /world/empty/set_pose --reqtype ignition.msgs.Pose --reptype ignition.msgs.Boolean --timeout 6000 --req 'name: \"small_car\", position: {x: 0, y: 0, z: 0.03}, orientation: {x: 0, y: 0, z: 1, w: 0.8}'"
         ],
         name="set_model_pose",
         shell=True,

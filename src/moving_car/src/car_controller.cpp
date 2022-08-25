@@ -29,9 +29,6 @@ public:
 protected:
     void camera_image_callback(const sensor_msgs::msg::Image &img)
     {
-        const double target_center = img.width / 2.0;
-        const double kp = 0.2;
-
         // 转换原始图像
         auto cv_img = cv_bridge::toCvCopy(img, "bgr8");
         cv::Mat gray_img;
@@ -45,16 +42,43 @@ protected:
 
         // 计算图像矩
         cv::Moments m = cv::moments(bin_img, true);
-        double center = m.m10 / m.m00;
+        double mx = m.m10 / m.m00;
+        double my = m.m01 / m.m00;
 
         // 更新速度控制指令
-        geometry_msgs::msg::Twist vel;
-        if (std::isfinite(center))
-        {
-            vel.linear.x = 0.4;
-            vel.angular.z = -kp * (center - target_center);
-        }
+        int width = img.width;
+        int height = img.height;
 
+        int vline_1 = width / 2.08;
+        int vline_2 = width - vline_1;
+
+        const double v_normal = 0.3;
+        const double R = 0.08;
+        const double kp1 = 10.1;
+        const double kp2 = 20.1;
+
+        double w = 0;
+
+        geometry_msgs::msg::Twist vel;
+        if (std::isfinite(mx) && std::isfinite(my))
+        {
+            if (mx >= vline_1 && mx <= vline_2)
+            {
+                vel.linear.x = v_normal;
+            }
+            else if (mx < vline_1)
+            {
+                w = kp1 * (vline_1 - mx) / vline_1 + kp2 * my / height;
+                vel.linear.x = w * R;
+                vel.angular.z = w;
+            }
+            else
+            {
+                w = kp1 * (mx - vline_2) / (width - vline_2) + kp2 * my / height;
+                vel.linear.x = w * R;
+                vel.angular.z = -w;
+            }
+        }
         cmd_vel_pub_->publish(vel);
     }
 
